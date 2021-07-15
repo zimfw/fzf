@@ -14,5 +14,8 @@ elif (( ${+commands[rg]} )); then
     command rg -uu -g '!.git' --files "${1}"
   }
 fi
+if (( ${+commands[bat]} )); then
+  export FZF_CTRL_T_OPTS="--preview 'command bat --color=always --line-range :500 {}' ${FZF_CTRL_T_OPTS}"
+fi
 
 if (( ${+FZF_DEFAULT_COMMAND} )) export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}

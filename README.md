@@ -4,8 +4,11 @@ fzf
 Configures [fzf] to use [fd] or [ripgrep] for faster fetching of files and
 directories names.
 
-Sets ALT-C previews with ls. Also sets CTRL-T previews with [bat] if it's
-installed. Press CTRL-/ to toggle the preview.
+
+Sets in the `ALT-C` window a preview of insider folders like `ls`. Also sets `CTRL-T` previews with [bat] if it's
+installed. Press `CTRL-/` to toggle the preview.
+
+![Alt text](image.png)
 
 Requirements
 ------------

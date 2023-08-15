@@ -1,11 +1,20 @@
-if (( ${+commands[fd]} )); then
+if (( ${+commands[bfs]} )); then
+  export FZF_DEFAULT_COMMAND='command bfs -exclude -name .git -type f -print | command cut -c3-'
+  export FZF_ALT_C_COMMAND='command bfs -mindepth 1 -exclude -name .git -type d -print | command cut -c3-'
+  _fzf_compgen_path() {
+    command bfs ${1} -name .git -prune -o -type f -print
+  }
+  _fzf_compgen_dir() {
+    command bfs ${1} -name .git -prune -o -type d -a -not -path ${1} -print
+  }
+elif (( ${+commands[fd]} )); then
   export FZF_DEFAULT_COMMAND='command fd -H --no-ignore-vcs -E .git -tf'
   export FZF_ALT_C_COMMAND='command fd -H --no-ignore-vcs -E .git -td'
   _fzf_compgen_path() {
-    command fd -H --no-ignore-vcs -E .git -tf . ${1}
+    command fd -H --no-ignore-vcs -E .git -tf --strip-cwd-prefix ${1}
   }
   _fzf_compgen_dir() {
-    command fd -H --no-ignore-vcs -E .git -td . ${1}
+    command fd -H --no-ignore-vcs -E .git -td --strip-cwd-prefix ${1}
   }
 elif (( ${+commands[rg]} )); then
   export FZF_DEFAULT_COMMAND="command rg -uu -g '!.git' --files"

@@ -1,6 +1,6 @@
 if (( ${+commands[bfs]} )); then
-  export FZF_DEFAULT_COMMAND="command bfs -mindepth 1 -exclude -name .git -type d,f -printf '%P\n' 2> /dev/null"
-  export FZF_ALT_C_COMMAND="command bfs -mindepth 1 -exclude -name .git -type d -printf '%P\n' 2> /dev/null"
+  export FZF_DEFAULT_COMMAND="command bfs -mindepth 1 -exclude -name .git -type d,f -printf '%P\n' 2>/dev/null"
+  export FZF_ALT_C_COMMAND="command bfs -mindepth 1 -exclude -name .git -type d -printf '%P\n' 2>/dev/null"
   _fzf_compgen_path() {
     command bfs ${1} -exclude -name .git -type d,f -a -not -path ${1} -print
   }

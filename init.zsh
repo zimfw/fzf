@@ -21,6 +21,11 @@ elif (( ${+commands[rg]} )); then
   _fzf_compgen_path() {
     command rg -uu -g '!.git' --files ${1}
   }
+elif (( ${+commands[ug]} )); then
+  export FZF_DEFAULT_COMMAND="command ug -lrs. --exclude-dir=.git --no-tree ''"
+  _fzf_compgen_path() {
+    command ug -lrs. --exclude-dir=.git --no-tree '' ${1}
+  }
 fi
 if (( ${+commands[bat]} )); then
   export FZF_CTRL_T_OPTS="--bind ctrl-/:toggle-preview --preview 'command bat --color=always --line-range :500 {}' ${FZF_CTRL_T_OPTS}"

@@ -1,6 +1,8 @@
 fzf
 ===
 
+Caches the script to set up Zsh shell integration.
+
 Configures [fzf] to use [bfs], [fd], [ripgrep] or [ugrep] for faster fetching of files and
 directories names.
 

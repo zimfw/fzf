@@ -1,3 +1,15 @@
+() {
+  local -r target=${1}
+  shift
+  local -r cmd=${commands[${1}]}
+  shift
+  if [[ ! ${target} -nt ${cmd} ]]; then
+    ${cmd} "${@}" >! ${target} 2>/dev/null
+    zcompile -UR ${target}
+  fi
+  source ${target}
+} ${0:h}/fzf---zsh.zsh fzf --zsh
+
 if (( ${+commands[bfs]} )); then
   export FZF_DEFAULT_COMMAND="command bfs -mindepth 1 -exclude -name .git -type d,f -printf '%P\n' 2>/dev/null"
   export FZF_ALT_C_COMMAND="command bfs -mindepth 1 -exclude -name .git -type d -printf '%P\n' 2>/dev/null"

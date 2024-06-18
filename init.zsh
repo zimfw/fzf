@@ -39,9 +39,19 @@ elif (( ${+commands[ug]} )); then
     command ug -lrs. --exclude-dir=.git --no-tree '' ${1}
   }
 fi
+
+local bat_cmd
 if (( ${+commands[bat]} )); then
-  export FZF_CTRL_T_OPTS="--bind ctrl-/:toggle-preview --preview 'command bat --color=always --line-range :500 {}' ${FZF_CTRL_T_OPTS}"
+  bat_cmd=bat
+elif (( ${+commands[batcat]} )); then
+  # APT package
+  bat_cmd=batcat
 fi
+if [[ -n ${bat_cmd} ]]; then
+  export FZF_CTRL_T_OPTS="--bind ctrl-/:toggle-preview --preview 'command ${bat_cmd} --color=always --line-range :500 {}' ${FZF_CTRL_T_OPTS}"
+fi
+unset bat_cmd
+
 local ls_cmd
 if command ls --version &>/dev/null; then
   # GNU

@@ -3,12 +3,12 @@
   shift
   local -r cmd=${commands[${1}]}
   shift
-  if [[ ! ${target} -nt ${cmd} ]]; then
-    ${cmd} "${@}" >! ${target} 2>/dev/null
+  if [[ ! ( -s ${target} && ${target} -nt ${cmd} ) ]]; then
+    ${cmd} "${@}" >! ${target} || return 1
     zcompile -UR ${target}
   fi
   source ${target}
-} ${0:h}/fzf---zsh.zsh fzf --zsh
+} ${0:h}/fzf---zsh.zsh fzf --zsh || return 1
 
 if (( ${+commands[bfs]} )); then
   export FZF_DEFAULT_COMMAND="command bfs -mindepth 1 -exclude -name .git -type d,f -printf '%P\n' 2>/dev/null"

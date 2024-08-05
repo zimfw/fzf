@@ -19,7 +19,7 @@ installed. Press CTRL-/ to toggle the preview.
 Requirements
 ------------
 
-[fzf] must be installed already. And either [bfs], [fd], [ripgrep] or [ugrep]
+[fzf] >= 0.48.0 must be installed. And either [bfs], [fd], [ripgrep] or [ugrep]
 must be installed already too.
 
 [fzf]: https://github.com/junegunn/fzf

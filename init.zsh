@@ -39,19 +39,13 @@ elif (( ${+commands[ug]} )); then
   }
 fi
 
-local bat_cmd
+local bat_cmd ls_cmd
 if (( ${+commands[bat]} )); then
   bat_cmd=bat
 elif (( ${+commands[batcat]} )); then
   # APT package
   bat_cmd=batcat
 fi
-if [[ -n ${bat_cmd} ]]; then
-  export FZF_CTRL_T_OPTS="--bind ctrl-/:toggle-preview --preview 'command ${bat_cmd} --color=always --line-range :500 {}' ${FZF_CTRL_T_OPTS}"
-fi
-unset bat_cmd
-
-local ls_cmd
 if command ls --version &>/dev/null; then
   # GNU
   ls_cmd='ls --group-directories-first --color=always'
@@ -67,7 +61,10 @@ else
     ls_cmd='ls --color=always'
   fi
 fi
+if [[ -n ${bat_cmd} ]]; then
+  export FZF_CTRL_T_OPTS="--bind ctrl-/:toggle-preview --preview 'if [[ -d {} ]]; then command ${ls_cmd} -CF {}; else command ${bat_cmd} --color=always --line-range :500 {}; fi' ${FZF_CTRL_T_OPTS}"
+fi
 export FZF_ALT_C_OPTS="--bind ctrl-/:toggle-preview --preview 'command ${ls_cmd} -CF {}' ${FZF_ALT_C_OPTS}"
-unset ls_cmd
+unset bat_cmd ls_cmd
 
 if (( ${+FZF_DEFAULT_COMMAND} )) export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}

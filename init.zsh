@@ -9,6 +9,7 @@
   source ${target}
 } ${0:h}/fzf---zsh.zsh fzf --zsh || return 1
 
+local fd_cmd bat_cmd=${(k)commands[bat]-${(k)commands[batcat]}} ls_cmd
 if (( ${+commands[bfs]} )); then
   export FZF_DEFAULT_COMMAND="command bfs -mindepth 1 -exclude -name .git -type d,f -printf '%P\n' 2>/dev/null"
   export FZF_ALT_C_COMMAND="command bfs -mindepth 1 -exclude -name .git -type d -printf '%P\n' 2>/dev/null"
@@ -18,24 +19,15 @@ if (( ${+commands[bfs]} )); then
   _fzf_compgen_dir() {
     command bfs ${1} -exclude -name .git -type d -a -not -path ${1} -print
   }
-elif (( ${+commands[fd]} )); then
-  export FZF_DEFAULT_COMMAND='command fd -H --no-ignore-vcs -E .git -td -tf'
-  export FZF_ALT_C_COMMAND='command fd -H --no-ignore-vcs -E .git -td'
-  _fzf_compgen_path() {
-    command fd -H --no-ignore-vcs -E .git -td -tf . ${1}
-  }
-  _fzf_compgen_dir() {
-    command fd -H --no-ignore-vcs -E .git -td . ${1}
-  }
-elif (( ${+commands[fdfind]} )); then
-  export FZF_DEFAULT_COMMAND='command fdfind -H --no-ignore-vcs -E .git -td -tf'
-  export FZF_ALT_C_COMMAND='command fdfind -H --no-ignore-vcs -E .git -td'
-  _fzf_compgen_path() {
-    command fdfind -H --no-ignore-vcs -E .git -td -tf . ${1}
-  }
-  _fzf_compgen_dir() {
-    command fdfind -H --no-ignore-vcs -E .git -td . ${1}
-  }
+elif fd_cmd=${(k)commands[fd]-${(k)commands[fdfind]}}; [[ -n ${fd_cmd} ]]; then
+  export FZF_DEFAULT_COMMAND="command ${fd_cmd} -H --no-ignore-vcs -E .git -td -tf"
+  export FZF_ALT_C_COMMAND="command ${fd_cmd} -H --no-ignore-vcs -E .git -td"
+  eval "_fzf_compgen_path() {
+    command ${fd_cmd} -H --no-ignore-vcs -E .git -td -tf . \${1}
+  }"
+  eval "_fzf_compgen_dir() {
+    command ${fd_cmd} -H --no-ignore-vcs -E .git -td . \${1}
+  }"
 elif (( ${+commands[rg]} )); then
   export FZF_DEFAULT_COMMAND="command rg -uu -g '!.git' --files --no-messages"
   _fzf_compgen_path() {
@@ -48,13 +40,6 @@ elif (( ${+commands[ug]} )); then
   }
 fi
 
-local bat_cmd ls_cmd
-if (( ${+commands[bat]} )); then
-  bat_cmd=bat
-elif (( ${+commands[batcat]} )); then
-  # APT package
-  bat_cmd=batcat
-fi
 if command ls --version &>/dev/null; then
   # GNU
   ls_cmd='ls --group-directories-first --color=always'
@@ -74,6 +59,6 @@ if [[ -n ${bat_cmd} ]]; then
   export FZF_CTRL_T_OPTS="--bind ctrl-/:toggle-preview --preview 'if [[ -d {} ]]; then command ${ls_cmd} -CF {}; else command ${bat_cmd} --color=always --line-range :500 {}; fi' ${FZF_CTRL_T_OPTS}"
 fi
 export FZF_ALT_C_OPTS="--bind ctrl-/:toggle-preview --preview 'command ${ls_cmd} -CF {}' ${FZF_ALT_C_OPTS}"
-unset bat_cmd ls_cmd
+unset fd_cmd bat_cmd ls_cmd
 
 if (( ${+FZF_DEFAULT_COMMAND} )) export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}

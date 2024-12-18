@@ -27,6 +27,15 @@ elif (( ${+commands[fd]} )); then
   _fzf_compgen_dir() {
     command fd -H --no-ignore-vcs -E .git -td . ${1}
   }
+elif (( ${+commands[fdfind]} )); then
+  export FZF_DEFAULT_COMMAND='command fdfind -H --no-ignore-vcs -E .git -td -tf'
+  export FZF_ALT_C_COMMAND='command fdfind -H --no-ignore-vcs -E .git -td'
+  _fzf_compgen_path() {
+    command fdfind -H --no-ignore-vcs -E .git -td -tf . ${1}
+  }
+  _fzf_compgen_dir() {
+    command fdfind -H --no-ignore-vcs -E .git -td . ${1}
+  }
 elif (( ${+commands[rg]} )); then
   export FZF_DEFAULT_COMMAND="command rg -uu -g '!.git' --files --no-messages"
   _fzf_compgen_path() {

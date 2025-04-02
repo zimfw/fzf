@@ -40,7 +40,11 @@ elif (( ${+commands[ug]} )); then
   }
 fi
 
-if command ls --version &>/dev/null; then
+if (( ${+commands[eza]} )); then
+  ls_cmd='eza --group-directories-first --color=always'
+elif (( ${+commands[lsd]} )); then
+  ls_cmd='lsd --group-directories-first --color=always'
+elif command ls --version &>/dev/null; then
   # GNU
   ls_cmd='ls --group-directories-first --color=always'
 else
@@ -56,9 +60,9 @@ else
   fi
 fi
 if [[ -n ${bat_cmd} ]]; then
-  export FZF_CTRL_T_OPTS="--bind ctrl-/:toggle-preview --preview 'if [[ -d {} ]]; then command ${ls_cmd} -CF {}; else command ${bat_cmd} --color=always --line-range :500 {}; fi' ${FZF_CTRL_T_OPTS}"
+  export FZF_CTRL_T_OPTS="--bind ctrl-/:toggle-preview --preview 'if [[ -d {} ]]; then command ${ls_cmd} -1F {}; else command ${bat_cmd} --color=always --line-range :500 {}; fi' ${FZF_CTRL_T_OPTS}"
 fi
-export FZF_ALT_C_OPTS="--bind ctrl-/:toggle-preview --preview 'command ${ls_cmd} -CF {}' ${FZF_ALT_C_OPTS}"
+export FZF_ALT_C_OPTS="--bind ctrl-/:toggle-preview --preview 'command ${ls_cmd} -1F {}' ${FZF_ALT_C_OPTS}"
 unset fd_cmd bat_cmd ls_cmd
 
 if (( ${+FZF_DEFAULT_COMMAND} )) export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}

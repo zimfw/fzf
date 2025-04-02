@@ -13,7 +13,7 @@ source <(fzf --zsh)
 Also configures [fzf] to use [bfs], [fd], [ripgrep] or [ugrep] for faster
 fetching of files and directories names.
 
-Sets ALT-C previews with ls. Also sets CTRL-T previews with [bat] if it's
+Sets ALT-C previews with [eza], [lsd] or ls. Also sets CTRL-T previews with [bat] if it's
 installed. Press CTRL-/ to toggle the preview.
 
 Requirements
@@ -27,4 +27,6 @@ must be installed already too.
 [fd]: https://github.com/sharkdp/fd
 [ripgrep]: https://github.com/BurntSushi/ripgrep
 [ugrep]: https://ugrep.com
+[eza]: https://github.com/eza-community/eza
+[lsd]: https://github.com/lsd-rs/lsd
 [bat]: https://github.com/sharkdp/bat

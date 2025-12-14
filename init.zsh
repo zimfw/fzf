@@ -22,12 +22,8 @@ if (( ${+commands[bfs]} )); then
 elif fd_cmd=${(k)commands[fd]-${(k)commands[fdfind]}}; [[ -n ${fd_cmd} ]]; then
   export FZF_DEFAULT_COMMAND="command ${fd_cmd} -H --no-ignore-vcs -E .git -td -tf"
   export FZF_ALT_C_COMMAND="command ${fd_cmd} -H --no-ignore-vcs -E .git -td"
-  eval "_fzf_compgen_path() {
-    command ${fd_cmd} -H --no-ignore-vcs -E .git -td -tf . \${1}
-  }"
-  eval "_fzf_compgen_dir() {
-    command ${fd_cmd} -H --no-ignore-vcs -E .git -td . \${1}
-  }"
+  functions[_fzf_compgen_path]="command ${fd_cmd} -H --no-ignore-vcs -E .git -td -tf . \${1}"
+  functions[_fzf_compgen_dir]="command ${fd_cmd} -H --no-ignore-vcs -E .git -td . \${1}"
 elif (( ${+commands[rg]} )); then
   export FZF_DEFAULT_COMMAND="command rg -uu -g '!.git' --files --no-messages"
   _fzf_compgen_path() {
@@ -60,9 +56,9 @@ else
   fi
 fi
 if [[ -n ${bat_cmd} ]]; then
-  export FZF_CTRL_T_OPTS="--bind ctrl-/:toggle-preview --preview 'if [[ -d {} ]]; then command ${ls_cmd} -1F {}; else command ${bat_cmd} --color=always --line-range :500 {}; fi' ${FZF_CTRL_T_OPTS}"
+  export FZF_CTRL_T_OPTS="--bind ctrl-/:toggle-preview --preview 'if [[ -d {} ]]; then ${ls_cmd} -1F {}; else ${bat_cmd} --color=always --line-range :500 {}; fi' ${FZF_CTRL_T_OPTS}"
 fi
-export FZF_ALT_C_OPTS="--bind ctrl-/:toggle-preview --preview 'command ${ls_cmd} -1F {}' ${FZF_ALT_C_OPTS}"
+export FZF_ALT_C_OPTS="--bind ctrl-/:toggle-preview --preview '${ls_cmd} -1F {}' ${FZF_ALT_C_OPTS}"
 unset fd_cmd bat_cmd ls_cmd
 
 if (( ${+FZF_DEFAULT_COMMAND} )) export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}

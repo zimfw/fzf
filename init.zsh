@@ -56,9 +56,9 @@ else
   fi
 fi
 if [[ -n ${bat_cmd} ]]; then
-  export FZF_CTRL_T_OPTS="--bind ctrl-/:toggle-preview --preview 'if [[ -d {} ]]; then ${ls_cmd} -1F {}; else ${bat_cmd} --color=always --line-range :500 {}; fi' ${FZF_CTRL_T_OPTS}"
+  export FZF_CTRL_T_OPTS="--bind ctrl-/:toggle-preview --preview 'if [[ -d {} ]]; then ${ls_cmd} -1F -- {}; else ${bat_cmd} --color=always --line-range :500 -- {}; fi' ${FZF_CTRL_T_OPTS}"
 fi
-export FZF_ALT_C_OPTS="--bind ctrl-/:toggle-preview --preview '${ls_cmd} -1F {}' ${FZF_ALT_C_OPTS}"
+export FZF_ALT_C_OPTS="--bind ctrl-/:toggle-preview --preview '${ls_cmd} -1F -- {}' ${FZF_ALT_C_OPTS}"
 unset fd_cmd bat_cmd ls_cmd
 
 if (( ${+FZF_DEFAULT_COMMAND} )) export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}
